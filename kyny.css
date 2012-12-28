@@ -1,0 +1,17 @@
+body {
+    font: x-small verdana,arial;
+    font-weight: normal;
+}
+
+#used {
+    float: right;
+    clear; both;
+}
+
+canvas { 
+    float: left;
+    clear; both;
+    position: absolute;
+    background-color: #808080;
+    border: 1px solid black;
+}
