@@ -31,8 +31,8 @@ def submit_hiscore():
     page += "</body></html>"
     return page
 
-@app.route("/<name:re:.*?\.(js|html|png|css)>")
-def serve_game(name):
-    return static_file(name, root="./")
+@app.route("/static/<name>")
+def serve_static(name):
+    return static_file(name)
 
 run(app, host="localhost", port=8080, reloader=True)
