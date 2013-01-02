@@ -4,14 +4,22 @@ body {
 }
 
 #used {
-    float: right;
-    clear; both;
+    position: absolute;
+    left: 810px; 
+    width: 400px;
+    height: 200px;
+}
+
+#toplist {
+    position: absolute;
+    left: 810px;
+    top: 210px;
 }
 
 canvas { 
-    float: left;
-    clear; both;
     position: absolute;
+    left: 0px;
+    top: 0px;
     background-color: #808080;
     border: 1px solid black;
 }
