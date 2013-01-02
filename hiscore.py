@@ -8,7 +8,8 @@ app = Bottle()
 @app.post('/hiscore')
 def submit_hiscore():
     newgame = '<a href="/kyny.html">New game</a>'
-    page = "<!DOCTYPE HTML><html><head><title>heh</title><meta charset=\"UTF-8\"></head><body>"
+    page = "<!DOCTYPE HTML><html><head><title>heh</title>" +
+           "<meta charset=\"UTF-8\"></head><body>"
     name = request.forms.get("name")
     score = request.forms.get("score")
     with open("hiscores.txt", "a") as f:
