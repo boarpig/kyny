@@ -103,17 +103,7 @@ function handleClick(event) {
                 }
         }
         var sana = selected.map(function(square) { return square.letter }).join("");
-        // TODO: text flowing out of the container
-        context.fillStyle = "#333333";
-        context.beginPath();
-        context.clearRect(checkButton.x, checkButton.y + checkButton.height, 300, 300);
-        if (sana.length <= 12) {
-            context.fillText(sana, checkButton.x + checkButton.width / 2, checkButton.y + checkButton.height + 36);
-        } else {
-            context.fillText(sana.slice(0, 12), checkButton.x + checkButton.width / 2, checkButton.y + checkButton.height + 36);
-            context.fillText(sana.slice(12, 23), checkButton.x + checkButton.width / 2, checkButton.y + checkButton.height + 72);
-        }
-        context.closePath();
+        document.getElementById("word").innerHTML = sana;
     } else {
         if (coord.x >= checkButton.x && coord.x <= checkButton.x + checkButton.width &&
             coord.y >= checkButton.y && coord.y <= checkButton.y + checkButton.height) {
@@ -136,7 +126,7 @@ function checkWord() {
         } else {
             document.getElementById("used").innerHTML += ", " + sana;
         }
-        updateScore();
+        document.getElementById("score").innerHTML = "SCORE:" + pisteet;
     }
 }
 
