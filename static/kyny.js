@@ -8,7 +8,6 @@ var canvas,
     selected = [],
     found = [],
     pisteet = 0,
-    checkButton,
     consonants = "BBCCDDFFGGHHHJKLLMMNNNPPQRRRSSSTTTVVWWXZ",
     vowels = "AAAEEEIIIOOOUUYY";
     // TODO: jaa aakkoset vokaaleihin ja konsonantteihin ja pistä joka toiseen
@@ -66,21 +65,6 @@ function checkValid(square) {
     }
 }
 
-function updateScore() {
-    context.beginPath();
-    context.font = "36px courier";
-    context.clearRect(500, 0, 300, 500);
-    context.fillStyle = "#333333";
-    context.fillText("SCORE", 650, 33, 280);
-    context.fillText(pisteet, 650, 69, 280);
-    context.fillStyle = "#333333";
-    context.fillRect(checkButton.x, checkButton.y, checkButton.width, checkButton.height);
-    context.fillStyle = "#bbbbbb";
-    context.fillText("Check", checkButton.x + checkButton.width / 2, checkButton.y + checkButton.height / 2);
-    context.closePath();
-}
-
-
 function handleClick(event) {
     var coord;
     if (event.offsetX !== undefined && event.offsetY !== undefined) { 
@@ -88,28 +72,21 @@ function handleClick(event) {
     } else {
         coord = { x: event.layerX, y: event.layerY };
     }
-    if (coord.x <= side) { 
-        var grid_x = Math.floor(coord.x / (side / grid_size));
-        var grid_y = Math.floor(coord.y / (side / grid_size));
-        clicked = squares[grid_y * grid_size + grid_x];
-        if (clicked === selected[selected.length - 1]) {
-            emptySquare(clicked);
-            selected.pop();
-        } else {
-            // häpeä sen niskaan, joka alla olevan rivin kirjotti
-            if (!selected.some(function(square) { return square == clicked;}) && checkValid(clicked) && selected.length < 24) {
-                    selected.push(clicked);
-                    hilightSquare(clicked);
-                }
-        }
-        var sana = selected.map(function(square) { return square.letter }).join("");
-        document.getElementById("word").innerHTML = sana;
+    var grid_x = Math.floor(coord.x / (side / grid_size));
+    var grid_y = Math.floor(coord.y / (side / grid_size));
+    clicked = squares[grid_y * grid_size + grid_x];
+    if (clicked === selected[selected.length - 1]) {
+        emptySquare(clicked);
+        selected.pop();
     } else {
-        if (coord.x >= checkButton.x && coord.x <= checkButton.x + checkButton.width &&
-            coord.y >= checkButton.y && coord.y <= checkButton.y + checkButton.height) {
-            checkWord();
-        }
+        // häpeä sen niskaan, joka alla olevan rivin kirjotti
+        if (!selected.some(function(square) { return square == clicked;}) && checkValid(clicked) && selected.length < 24) {
+                selected.push(clicked);
+                hilightSquare(clicked);
+            }
     }
+    var sana = selected.map(function(square) { return square.letter }).join("");
+    document.getElementById("word").innerHTML = sana;
 }
 
 function checkWord() {
@@ -127,6 +104,7 @@ function checkWord() {
             document.getElementById("used").innerHTML += ", " + sana;
         }
         document.getElementById("score").innerHTML = "SCORE:" + pisteet;
+        document.getElementById("word").innerHTML = "";
     }
 }
 
@@ -135,11 +113,6 @@ function init() {
     context = canvas.getContext("2d");
     context.textAlign = "center";
     context.textBaseline = "middle";
-    checkButton = {} 
-    checkButton["x"] = 7 * (side / grid_size) + 5;
-    checkButton["width"] = canvas.width - checkButton.x - 10;
-    checkButton["height"] = checkButton.width;
-    checkButton["y"] = canvas.height / 2 - checkButton.height / 2;
     for (var i = 0; i < (grid_size * grid_size); i++) {
         squares[i] = {
             letter: getLetter(i),
@@ -149,5 +122,5 @@ function init() {
             height: side / grid_size - 10 };
         emptySquare(squares[i]);
     }
-    updateScore();
+    document.getElementById("score").innerHTML = "SCORE:" + pisteet;
 }

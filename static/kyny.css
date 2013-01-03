@@ -3,32 +3,45 @@ body {
     font-weight: normal;
 }
 
+#button {
+    text-decoration: none;
+    font-size: 30px;
+    position: absolute;
+    cursor: pointer;
+    display: inline-block;
+    padding: 100px;
+    color: white;
+    background-color: gray;
+    top: 80px;
+    left: 510px;
+}
+
 #score {
     font-size: 30px;
     position: absolute;
     top: 10px;
-    left: 810px; 
+    left: 510px; 
 }
 
 #word {
     font-size: 30px;
     position: absolute;
     top: 40px;
-    left: 810px; 
+    left: 510px; 
 }
 
 #used {
     position: absolute;
-    top: 80px;
-    left: 810px; 
+    top: 320px;
+    left: 510px; 
     width: 400px;
     height: 200px;
 }
 
 #toplist {
     position: absolute;
-    top: 200px;
-    left: 810px;
+    top: 230px;
+    left: 510px;
     top: 210px;
 }
 
