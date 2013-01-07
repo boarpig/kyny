@@ -20,7 +20,7 @@ def submit_hiscore():
     score = request.forms.get("score")
     time = request.forms.get("time")
     with open("hiscore_" + time + ".txt", "a") as f:
-        print(name + ": " + score + "\n", file=f)
+        print(name + ": " + score, file=f)
     redirect("/highscore")
 
 @app.get("/highscore")
@@ -45,14 +45,14 @@ def get_hiscore():
         page += "<h1>" + time + " minute highscore</h1>"
         page += "<table border=1>"
         for scoor in scoredic:
-            page += "<tr><td>" + str(scoor[0]) + ": " + str(scoor[1]) + \
+            page += "<tr><td>" + str(scoor[0]) + "</td><td>" + str(scoor[1]) + \
                     "</td></tr>"
         page += "</table>"
-    page += '<a href="/main">Back to main menu</a>'
+    page += '<a href="/">Back to main menu</a>'
     page += "</body></html>"
     return page
 
-@app.route("/<time>")
+@app.route("/game/<time>")
 @view("game.html")
 def index(time="1"):
     if time in ["1", "5", "15"]:
