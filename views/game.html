@@ -1,0 +1,30 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <title>kyny</title>
+        <script type="text/javascript" src="static/words.js"></script>
+        <script type="text/javascript" src="static/kyny.js"></script>
+        <link type="text/css" href="static/kyny.css" rel="stylesheet">
+        <link rel='shortcut icon' href="static/favicon.png" type="image/png" />
+        <meta charset="UTF-8">
+    </head>
+    <body onload="init();">
+        <form id=hiscore action="/hiscore" method="post">
+            <label>Nimi
+                <input type=text placeholder="name" name=name />
+            </label>
+            <input name=score id=score_form type=hidden value=0 />
+            <input name=time id=gametime type=hidden value={{time}} />
+            <input name="Send" type="submit" value="Send" />
+        </form>
+        <div id=game>
+            <canvas id=alusta width=500 height=500 onClick="handleClick(event)">
+            Canvas not supported.</canvas>
+            <div id=score></div>
+            <div id=word></div>
+            <div id=time></div>
+            <a href="#" id=button onClick="checkWord();">Check</a>
+            <div id=used></div>
+        </div>
+    </body>
+</html>

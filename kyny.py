@@ -1,43 +1,74 @@
 #!/usr/bin/python
 
-from bottle import Bottle, get, post, route, request, run, static_file, template
+from bottle import Bottle
+from bottle import get
+from bottle import post
+from bottle import redirect
+from bottle import request
+from bottle import route
+from bottle import run
+from bottle import static_file 
+from bottle import template
+from bottle import view
 import os
 
 app = Bottle()
 
 @app.post('/hiscore')
 def submit_hiscore():
-    newgame = '<a href="/kyny.html">New game</a>'
-    page = "<!DOCTYPE HTML><html><head><title>heh</title>" + \
-           "<meta charset=\"UTF-8\"></head><body>"
     name = request.forms.get("name")
     score = request.forms.get("score")
-    with open("hiscores.txt", "a") as f:
+    time = request.forms.get("time")
+    with open("hiscore_" + time + ".txt", "a") as f:
         print(name + ": " + score + "\n", file=f)
-    with open("hiscores.txt", "r") as f:
-        scores = f.readlines()
-    scoredic = []
-    for scori in scores:
-        scori = scori[:-1]
-        print('"' + scori + '"')
-        if len(scori) > 1:
-            user, score = scori.split(":")
-            scoredic.append((int(score), user))
-    scoredic.sort()
-    scoredic.reverse()
-    for scoor in scoredic:
-        page += str(scoor[0]) + ": " + str(scoor[1]) + "<br>"
-    page += newgame
+    redirect("/highscore")
+
+@app.get("/highscore")
+def get_hiscore():
+    times = ("1", "5", "15")
+    page = "<!DOCTYPE HTML><html><head><title>heh</title>" + \
+           "<meta charset=\"UTF-8\"></head><body>"
+    for time in times:
+        try:
+            with open("hiscore_" + time + ".txt", "r") as f:
+                scores = f.readlines()
+        except FileNotFoundError:
+            scores = ""
+        scoredic = []
+        for scori in scores:
+            scori = scori[:-1]
+            if len(scori) > 1:
+                user, score = scori.split(":")
+                scoredic.append((int(score), user))
+        scoredic.sort()
+        scoredic.reverse()
+        page += "<h1>" + time + " minute highscore</h1>"
+        page += "<table border=1>"
+        for scoor in scoredic:
+            page += "<tr><td>" + str(scoor[0]) + ": " + str(scoor[1]) + \
+                    "</td></tr>"
+        page += "</table>"
+    page += '<a href="/main">Back to main menu</a>'
     page += "</body></html>"
     return page
 
+@app.route("/<time>")
+@view("game.html")
+def index(time="1"):
+    if time in ["1", "5", "15"]:
+        return dict(time=time)
+
 @app.route("/")
-def index():
-    return template("template/game.html")
+def serve_main():
+    return static_file("main.html", root="static/")
+
+@app.route("/favicon.ico")
+def serve_favicon():
+    return static_file("favicon.png", root="static/")
 
 @app.route("/static/<name>")
 def serve_static(name):
-    return static_file("static/" + name, root="./")
+    return static_file(name, root="static/")
 
 run(app, server="tornado", host="localhost", port=8080, reloader=True,
         debug=True)

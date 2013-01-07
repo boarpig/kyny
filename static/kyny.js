@@ -8,8 +8,10 @@ var canvas,
     selected = [],
     found = [],
     pisteet = 0,
+    curTime = 30,
     consonants = "BBCCDDFFGGHHHJKLLMMNNNPPQRRRSSSTTTVVWWXZ",
-    vowels = "AAAEEEIIIOOOUUYY";
+    vowels = "AAAEEEIIIOOOUUYY",
+    timeID;
     // TODO: jaa aakkoset vokaaleihin ja konsonantteihin ja pistä joka toiseen
     // ruutuun aina vokaali ja joka toiseen konsonantti
 
@@ -103,10 +105,27 @@ function checkWord() {
         } else {
             document.getElementById("used").innerHTML += ", " + sana;
         }
-        document.getElementById("score").innerHTML = "SCORE:" + pisteet;
+        document.getElementById("score").innerHTML = "Score:" + pisteet;
         document.getElementById("word").innerHTML = "";
     }
 }
+
+function timeloop() {
+    curTime = curTime - 1;
+    minute = Math.floor(curTime / 60);
+    seconds = curTime - (minute * 60);
+    if (seconds < 10) {
+        seconds = "0" + seconds;
+    }
+    document.getElementById("time").innerHTML = "Time: " + minute + ":" + seconds;
+    if (curTime == 0) {
+        window.clearInterval(timeID);
+        document.getElementById("game").style.display = "none";
+        document.getElementById("hiscore").style.display = "inline";
+        document.getElementById("score_form").value = pisteet;
+    }
+}
+
 
 function init() {
     canvas = document.getElementById("alusta");
@@ -122,5 +141,8 @@ function init() {
             height: side / grid_size - 10 };
         emptySquare(squares[i]);
     }
-    document.getElementById("score").innerHTML = "SCORE:" + pisteet;
+    document.getElementById("score").innerHTML = "Score:" + pisteet;
+    curTime = document.getElementById("gametime").value * 60;
+    timeloop();
+    timeID = setInterval(timeloop, 1000);
 }
