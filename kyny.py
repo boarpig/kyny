@@ -70,5 +70,4 @@ def serve_favicon():
 def serve_static(name):
     return static_file(name, root="static/")
 
-run(app, server="tornado", host="localhost", port=8080, reloader=True,
-        debug=True)
+run(app, server="tornado", host="localhost", port=8080, reloader=True, debug=True)

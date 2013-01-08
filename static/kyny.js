@@ -123,6 +123,7 @@ function timeloop() {
         document.getElementById("game").style.display = "none";
         document.getElementById("hiscore").style.display = "inline";
         document.getElementById("score_form").value = pisteet;
+        document.getElementById("submit_score").innerHTML = "You got " + pisteet + " points!";
     }
 }
 
