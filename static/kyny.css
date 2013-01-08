@@ -53,13 +53,6 @@ body {
     height: 200px;
 }
 
-#toplist {
-    position: absolute;
-    top: 230px;
-    left: 510px;
-    top: 210px;
-}
-
 canvas { 
     position: absolute;
     left: 0px;
