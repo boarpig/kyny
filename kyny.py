@@ -18,24 +18,43 @@ app = Bottle()
 with sqlite3.connect("kyny.db") as conn:
     c = conn.cursor()
     c.execute("""create table if not exists score(id integer primary key
-            autoincrement, user text not null, score int not null, time int not
+            autoincrement, user text not null, score integer not null, time
+            integer not
             null)""")
     conn.commit()
 
 @app.post('/hiscore')
 def submit_hiscore():
     name = request.forms.get("name")
-    score = request.forms.get("score")
+    name = name.strip()
+    if len(name) > 50:
+        name = name[:50]
+    if len(name) == 0:
+        redirect("/highscore")
+    try:
+        score = int(request.forms.get("score"))
+        if score <= 0 or score > 1337:
+            score = 0
+    except ValueError:
+        score = 0
     time = request.forms.get("time")
-    with sqlite3.connect("kyny.db") as conn:
-        conn.execute("insert into score(user, score, time) values (?, ?, ?)",
-                (name, score, time))
+    if time in ("1", "5", "15"):
+        with sqlite3.connect("kyny.db") as conn:
+            conn.execute("insert into score(user, score, time) values (?, ?, ?)",
+                    (name, score, time))
     redirect("/highscore")
+
+def fix_strings(in_text):
+    replace_dict = {"&": "&amp;", "<": "&lt;", ">": "&gt;"}
+    for key in replace_dict:
+        in_text = in_text.replace(key, replace_dict[key])
+    return in_text
 
 @app.get("/highscore")
 def get_hiscore():
     times = (1, 5, 15)
-    page = "<!DOCTYPE HTML><html><head><title>heh</title>" + \
+    page = "<!DOCTYPE HTML><html><head><title>Highscore</title>" + \
+        '<link type="text/css" href="/static/hiscore.css" rel="stylesheet">' + \
            "<meta charset=\"UTF-8\"></head><body>"
     with sqlite3.connect("kyny.db") as conn:
         c = conn.cursor()
@@ -45,7 +64,10 @@ def get_hiscore():
             page += "<h1>" + str(time) + " minute highscore</h1>"
             page += "<table border=1>"
             for record in c:
-                page += "<tr><td>" + str(record[0]) + "</td>" + \
+                fixed = fix_strings(record[0])
+                if len(fixed) > 50:
+                    fixed = fixed[:50] + "..."
+                page += "<tr><td>" + fixed + "</td>" + \
                         "<td>" + str(record[1]) + "</td></tr>"
             page += "</table>"
     page += '<a href="/">Back to main menu</a>'
