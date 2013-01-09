@@ -1,0 +1,6 @@
+td {
+    max-width: 50%;
+    max-height: 20px;
+    word-wrap: break-word;
+    overflow: hidden;
+}
