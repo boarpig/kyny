@@ -1,4 +1,5 @@
 #!/usr/bin/python
+#coding: utf8
 
 from bottle import Bottle
 from bottle import get
@@ -25,19 +26,19 @@ with sqlite3.connect("kyny.db") as conn:
 
 @app.post('/hiscore')
 def submit_hiscore():
-    name = request.forms.get("name")
+    name = request.forms.name
     name = name.strip()
     if len(name) > 50:
         name = name[:50]
     if len(name) == 0:
         redirect("/highscore")
     try:
-        score = int(request.forms.get("score"))
+        score = int(request.forms.score)
         if score <= 0 or score > 1337:
             score = 0
     except ValueError:
         score = 0
-    time = request.forms.get("time")
+    time = request.forms.time
     if time in ("1", "5", "15"):
         with sqlite3.connect("kyny.db") as conn:
             conn.execute("insert into score(user, score, time) values (?, ?, ?)",
@@ -65,8 +66,6 @@ def get_hiscore():
             page += "<table border=1>"
             for record in c:
                 fixed = fix_strings(record[0])
-                if len(fixed) > 50:
-                    fixed = fixed[:50] + "..."
                 page += "<tr><td>" + fixed + "</td>" + \
                         "<td>" + str(record[1]) + "</td></tr>"
             page += "</table>"
