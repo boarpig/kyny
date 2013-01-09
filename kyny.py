@@ -11,43 +11,43 @@ from bottle import static_file
 from bottle import template
 from bottle import view
 import os
+import sqlite3
 
 app = Bottle()
+
+with sqlite3.connect("kyny.db") as conn:
+    c = conn.cursor()
+    c.execute("""create table if not exists score(id integer primary key
+            autoincrement, user text not null, score int not null, time int not
+            null)""")
+    conn.commit()
 
 @app.post('/hiscore')
 def submit_hiscore():
     name = request.forms.get("name")
     score = request.forms.get("score")
     time = request.forms.get("time")
-    with open("hiscore_" + time + ".txt", "a") as f:
-        print(name + ": " + score, file=f)
+    with sqlite3.connect("kyny.db") as conn:
+        conn.execute("insert into score(user, score, time) values (?, ?, ?)",
+                (name, score, time))
     redirect("/highscore")
 
 @app.get("/highscore")
 def get_hiscore():
-    times = ("1", "5", "15")
+    times = (1, 5, 15)
     page = "<!DOCTYPE HTML><html><head><title>heh</title>" + \
            "<meta charset=\"UTF-8\"></head><body>"
-    for time in times:
-        try:
-            with open("hiscore_" + time + ".txt", "r") as f:
-                scores = f.readlines()
-        except FileNotFoundError:
-            scores = ""
-        scoredic = []
-        for scori in scores:
-            scori = scori[:-1]
-            if len(scori) > 1:
-                user, score = scori.split(":")
-                scoredic.append((int(score), user))
-        scoredic.sort()
-        scoredic.reverse()
-        page += "<h1>" + time + " minute highscore</h1>"
-        page += "<table border=1>"
-        for scoor in scoredic:
-            page += "<tr><td>" + str(scoor[0]) + "</td><td>" + str(scoor[1]) + \
-                    "</td></tr>"
-        page += "</table>"
+    with sqlite3.connect("kyny.db") as conn:
+        c = conn.cursor()
+        for time in times:
+            c.execute("""select user, score from score where time=? order by
+                    score desc""", (str(time),))
+            page += "<h1>" + str(time) + " minute highscore</h1>"
+            page += "<table border=1>"
+            for record in c:
+                page += "<tr><td>" + str(record[0]) + "</td>" + \
+                        "<td>" + str(record[1]) + "</td></tr>"
+            page += "</table>"
     page += '<a href="/">Back to main menu</a>'
     page += "</body></html>"
     return page
