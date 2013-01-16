@@ -1,6 +1,6 @@
 function begins_with(array, word) {
     var newarray = [];
-    for (var item in array) {
+    for (var item = 0; item < array.length; item++) {
         if (array[item].length >= word.length && array[item].substring(0, word.length) == word) {
             newarray.push(array[item]);
         }
@@ -10,7 +10,7 @@ function begins_with(array, word) {
 
 function contains(array, item) {
     var found = false;
-    for (var i in array) {
+    for (var i = 0; i < array.length; i++) {
         if (array[i][0] == item[0] && array[i][1] == item[1]) {
             found = true;
             break;
@@ -55,7 +55,7 @@ function traverse(lwords, wrd, x, y, prev){
     }
     var adjacent = temp_adjacent.map(coordinates);
     if (temp.length > 0) {
-        for (var g in adjacent) {
+        for (var g = 0; g < adjacent.length; g++) {
             var newx = x + adjacent[g][0];
             var newy = y + adjacent[g][1];
             if (!contains(previous, [newx, newy])) {
@@ -77,8 +77,15 @@ function find_all_words() {
     if (foundwords.length > 0) {
         foundwords = _.uniq(foundwords);
         dive.innerHTML = "Found " + foundwords.length + " words: ";
-        for (var word in foundwords) {
-            dive.innerHTML += ", " + foundwords[word];
+        for (var word = 0; word < foundwords.length; word++) {
+            if (found.indexOf(foundwords[word]) != -1) {
+                foundwords[word] = "<b>" + foundwords[word] + "</b>";
+            }
+            if (word == 0) {
+                dive.innerHTML += foundwords[word];
+            } else {
+                dive.innerHTML += ", " + foundwords[word];
+            }
         }
     } else {
         dive.innerHTML = "No words found";
