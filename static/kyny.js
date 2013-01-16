@@ -12,8 +12,6 @@ var canvas,
     consonants = "BBCCDDFFGGHHHJKLLMMNNNPPQRRRSSSTTTVVWWXZ",
     vowels = "AAAEEEIIIOOOUUYY",
     timeID;
-    // TODO: jaa aakkoset vokaaleihin ja konsonantteihin ja pistä joka toiseen
-    // ruutuun aina vokaali ja joka toiseen konsonantti
 
 function getLetter(nth) {
     if (nth % 2 == 0) {
