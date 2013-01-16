@@ -19,6 +19,10 @@
             <input name=score id=score_form type=hidden value=0 />
             <input name=time id=gametime type=hidden value={{time}} />
             <input name="Send" type="submit" value="Send" />
+            <div id=allwords>
+                <a href="#" onClick="find_all_words();">Click here to find all
+                    possible words.</a>
+            </div>
         </form>
         <div id=game>
             <canvas id=alusta width=500 height=500 onClick="handleClick(event)">
@@ -26,9 +30,6 @@
             <div id=score></div>
             <div id=word></div>
             <div id=time></div>
-            <div id=allwords>
-                <a href="#" onClick="find_all_words();">find all</a>
-            </div>
             <a href="#" id=button onClick="checkWord();">Check</a>
             <div id=used></div>
         </div>

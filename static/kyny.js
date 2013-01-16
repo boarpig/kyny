@@ -125,7 +125,6 @@ function timeloop() {
     }
 }
 
-
 function init() {
     canvas = document.getElementById("alusta");
     context = canvas.getContext("2d");

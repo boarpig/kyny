@@ -3,6 +3,10 @@ body {
     font-weight: normal;
 }
 
+#allwords {
+    padding: 10px;
+}
+
 #hiscore {
     display: none;
 }
@@ -43,12 +47,6 @@ body {
     background-color: gray;
     top: 110px;
     left: 510px;
-}
-
-#allwords {
-    position: absolute;
-    top: 550px;
-    left: 510px; 
 }
 
 #used {
