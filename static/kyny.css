@@ -45,6 +45,12 @@ body {
     left: 510px;
 }
 
+#allwords {
+    position: absolute;
+    top: 550px;
+    left: 510px; 
+}
+
 #used {
     position: absolute;
     top: 350px;

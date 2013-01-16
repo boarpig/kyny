@@ -4,6 +4,8 @@
         <title>kyny</title>
         <script type="text/javascript" src="/static/words.js"></script>
         <script type="text/javascript" src="/static/kyny.js"></script>
+        <script type="text/javascript" src="/static/underscore.js"></script>
+        <script type="text/javascript" src="/static/allwords.js"></script>
         <link type="text/css" href="/static/kyny.css" rel="stylesheet">
         <link rel='shortcut icon' href="/static/favicon.png" type="image/png" />
         <meta charset="UTF-8">
@@ -24,6 +26,9 @@
             <div id=score></div>
             <div id=word></div>
             <div id=time></div>
+            <div id=allwords>
+                <a href="#" onClick="find_all_words();">find all</a>
+            </div>
             <a href="#" id=button onClick="checkWord();">Check</a>
             <div id=used></div>
         </div>
