@@ -4,3 +4,7 @@ td {
     word-wrap: break-word;
     overflow: hidden;
 }
+
+.hi {
+    background-color: lightgreen;
+}

@@ -6,6 +6,7 @@ from bottle import get
 from bottle import post
 from bottle import redirect
 from bottle import request
+from bottle import response
 from bottle import route
 from bottle import run
 from bottle import static_file 
@@ -28,6 +29,7 @@ with sqlite3.connect("kyny.db") as conn:
 def submit_hiscore():
     name = request.forms.name
     name = name.strip()
+    response.set_cookie("name", name, max_age=20 * 365 * 24 * 3600)
     if len(name) > 50:
         name = name[:50]
     if len(name) == 0:
@@ -43,7 +45,21 @@ def submit_hiscore():
         with sqlite3.connect("kyny.db") as conn:
             conn.execute("insert into score(user, score, time) values (?, ?, ?)",
                     (name, score, time))
-    redirect("/highscore")
+    redirect_page = """<!DOCTYPE html>
+                    <html>
+                    <head>
+                    <title>Redirecting to highscore list</title>
+                    <meta charset="UTF-8">
+                    <meta http-equiv="Refresh" content="0; url=/highscore" />
+                    </head>
+                    <body>
+                    <p>You are being redirected to <a
+                    href="/highscore">highscore list</a>.</p>
+                    <p>If you are not redirected after a few seconds, please click on the
+                    link above!</p>
+                    </body>
+                    </html>"""
+    return redirect_page
 
 def fix_strings(in_text):
     replace_dict = {"&": "&amp;", "<": "&lt;", ">": "&gt;"}
@@ -54,6 +70,10 @@ def fix_strings(in_text):
 @app.get("/highscore")
 def get_hiscore():
     times = (1, 5, 15)
+    if request.get_cookie("name"):
+        name = request.get_cookie("name")
+    else:
+        name = ""
     page = "<!DOCTYPE HTML><html><head><title>Highscore</title>" + \
         '<link type="text/css" href="/static/hiscore.css" rel="stylesheet">' + \
            "<meta charset=\"UTF-8\"></head><body>"
@@ -66,8 +86,12 @@ def get_hiscore():
             page += "<table border=1>"
             for record in c:
                 fixed = fix_strings(record[0])
-                page += "<tr><td>" + fixed + "</td>" + \
-                        "<td>" + str(record[1]) + "</td></tr>"
+                if fixed == name:
+                    page += "<tr class=hi><td class=hi><b>" + fixed + "</b></td>" + \
+                            "<td><b>" + str(record[1]) + "</b></td></tr>"
+                else:
+                    page += "<tr><td>" + fixed + "</td>" + \
+                            "<td>" + str(record[1]) + "</td></tr>"
             page += "</table>"
     page += '<a href="/">Back to main menu</a>'
     page += "</body></html>"
