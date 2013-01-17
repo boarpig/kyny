@@ -104,6 +104,7 @@ def index(time="1"):
         name = request.get_cookie("name")
     else:
         name = ""
+    name = fix_strings(name)
     if time in ["1", "5", "15"]:
         return dict(time=time, name=name)
 
