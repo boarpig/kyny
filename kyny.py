@@ -40,6 +40,7 @@ def submit_hiscore():
             score = 0
     except ValueError:
         score = 0
+    response.set_cookie("score", str(score), max_age=60)
     time = request.forms.time
     if time in ("1", "5", "15"):
         with sqlite3.connect("kyny.db") as conn:
@@ -71,9 +72,13 @@ def fix_strings(in_text):
 def get_hiscore():
     times = (1, 5, 15)
     if request.get_cookie("name"):
-        name = request.get_cookie("name")
+        cookie_name = request.get_cookie("name")
     else:
-        name = ""
+        cookie_name = ""
+    if request.get_cookie("score"):
+        cookie_score = request.get_cookie("score")
+    else:
+        cookie_score = ""
     page = "<!DOCTYPE HTML><html><head><title>Highscore</title>" + \
         '<link type="text/css" href="/static/hiscore.css" rel="stylesheet">' + \
            "<meta charset=\"UTF-8\"></head><body>"
@@ -84,14 +89,21 @@ def get_hiscore():
                     score desc""", (str(time),))
             page += "<h1>" + str(time) + " minute highscore</h1>"
             page += "<table border=1>"
+            scored = False
             for record in c:
-                fixed = fix_strings(record[0])
-                if fixed == name:
-                    page += "<tr class=hi><td class=hi><b>" + fixed + "</b></td>" + \
-                            "<td><b>" + str(record[1]) + "</b></td></tr>"
+                name = fix_strings(record[0])
+                score = str(record[1])
+                if name == cookie_name:
+                    if score == cookie_score and scored == False:
+                        page += "<tr class=hi><td class=hi><b>" + name + "</b></td>"
+                        page += "<td><b>" + score + "</b></td></tr>"
+                        scored = True
+                    else:
+                        page += "<tr class=hi><td class=hi>" + name + "</td>"
+                        page += "<td>" + score + "</td></tr>"
                 else:
-                    page += "<tr><td>" + fixed + "</td>" + \
-                            "<td>" + str(record[1]) + "</td></tr>"
+                    page += "<tr><td>" + name + "</td>"
+                    page += "<td>" + score + "</td></tr>"
             page += "</table>"
     page += '<a href="/">Back to main menu</a>'
     page += "</body></html>"
