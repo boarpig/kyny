@@ -100,8 +100,12 @@ def get_hiscore():
 @app.route("/game/<time>")
 @view("game.html")
 def index(time="1"):
+    if request.get_cookie("name"):
+        name = request.get_cookie("name")
+    else:
+        name = ""
     if time in ["1", "5", "15"]:
-        return dict(time=time)
+        return dict(time=time, name=name)
 
 @app.route("/")
 def serve_main():

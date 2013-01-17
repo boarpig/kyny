@@ -14,7 +14,7 @@
         <form id=hiscore action="/hiscore" method="post">
             <h1 id=scoretitle>Time is up!</h1>
             <label>Nimi
-                <input type=text placeholder="name" name=name />
+                <input type=text placeholder="name" name=name value="{{name}}" />
             </label>
             <input name=score id=score_form type=hidden value=0 />
             <input name=time id=gametime type=hidden value={{time}} />
