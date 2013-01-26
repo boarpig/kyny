@@ -82,6 +82,7 @@ def get_hiscore():
     page = "<!DOCTYPE HTML><html><head><title>Highscore</title>" + \
         '<link type="text/css" href="/static/hiscore.css" rel="stylesheet">' + \
            "<meta charset=\"UTF-8\"></head><body>"
+    page += '<a href="/">Back to main menu</a>'
     with sqlite3.connect("kyny.db") as conn:
         c = conn.cursor()
         for time in times:
