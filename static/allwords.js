@@ -67,6 +67,7 @@ function traverse(lwords, wrd, x, y, prev){
 
 function find_all_words() {
     var dive =  document.getElementById("allwords");
+    var start = Date.now();
     for (var x = 0; x < 7; x++) {
         for (var y = 0; y < 7; y++) {
             letter = squares[7 * y + x].letter;
@@ -74,6 +75,7 @@ function find_all_words() {
             traverse(words, "", x, y, []);
         }
     }
+    var since = Date.now() - start;
     if (foundwords.length > 0) {
         foundwords = _.uniq(foundwords);
         dive.innerHTML = "Found " + foundwords.length + " words: ";
@@ -87,6 +89,7 @@ function find_all_words() {
                 dive.innerHTML += ", " + foundwords[word];
             }
         }
+        dive.innerHTML += "<br><br>Time used for finding all words:" + since + " ms.";
     } else {
         dive.innerHTML = "No words found";
     }
